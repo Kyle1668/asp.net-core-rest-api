@@ -7,16 +7,7 @@ namespace REST_API_Example.Models
 {
     public class Color
     {
-        private readonly string _hex;
-
-        public Color(string inHex)
-        {
-            _hex = inHex;                        
-        }
-
-        public string GetHex()
-        {
-            return _hex;
-        }
+        public string Hex { get; set; }
+        public long Id { get; set; }
     }
 }
