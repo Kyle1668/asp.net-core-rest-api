@@ -46,13 +46,38 @@ namespace REST_API_Example.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Color>> PostTodoItem([FromBody] Color inColor)
+        public async Task<ActionResult<Color>> PostColor([FromBody] Color inColor)
         {
-            Console.WriteLine(inColor.Hex);
             _context.ColorItems.Add(inColor);
             await _context.SaveChangesAsync();
-
             return CreatedAtAction("GetColor", new { id = inColor.Id }, inColor);
+        }
+
+        // PUT: api/Todo/5
+        [HttpPut("{id}")]
+        public async Task<ActionResult<Color>> PutColor(long id, [FromBody] Color updateColor)
+        {
+            if (id != updateColor.Id || id > _context.ColorItems.Count()) return BadRequest();
+
+            _context.Entry(updateColor).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+            return NoContent();
+        }
+
+        // DELETE: api/Todo/5
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<Color>> DeleteTodoItem(long id)
+        {
+            var todoItem = await _context.ColorItems.FindAsync(id);
+            if (todoItem == null)
+            {
+                return NotFound();
+            }
+
+            _context.ColorItems.Remove(todoItem);
+            await _context.SaveChangesAsync();
+
+            return todoItem;
         }
 
     }
