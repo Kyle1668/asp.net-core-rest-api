@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -43,5 +44,14 @@ namespace REST_API_Example.Controllers
 
             return colorItem;
         }
+
+        [HttpPost]
+        public async Task<ActionResult<Color>> PostColor(Color inColor)
+        {
+            _context.ColorItems.Add(inColor);
+            await _context.SaveChangesAsync();
+            return CreatedAtAction("GetColor", new {id = inColor.Id}, inColor);
+        }
+
     }
 }
