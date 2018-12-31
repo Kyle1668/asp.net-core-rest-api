@@ -46,11 +46,13 @@ namespace REST_API_Example.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Color>> PostColor(Color inColor)
+        public async Task<ActionResult<Color>> PostTodoItem([FromBody] Color inColor)
         {
+            Console.WriteLine(inColor.Hex);
             _context.ColorItems.Add(inColor);
             await _context.SaveChangesAsync();
-            return CreatedAtAction("GetColor", new {id = inColor.Id}, inColor);
+
+            return CreatedAtAction("GetColor", new { id = inColor.Id }, inColor);
         }
 
     }
