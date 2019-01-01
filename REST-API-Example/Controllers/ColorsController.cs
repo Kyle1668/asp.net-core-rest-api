@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -50,7 +49,7 @@ namespace REST_API_Example.Controllers
         {
             _context.ColorItems.Add(inColor);
             await _context.SaveChangesAsync();
-            return CreatedAtAction("GetColor", new { id = inColor.Id }, inColor);
+            return CreatedAtAction("GetColor", new {id = inColor.Id}, inColor);
         }
 
         // PUT: api/Todo/5
@@ -69,16 +68,12 @@ namespace REST_API_Example.Controllers
         public async Task<ActionResult<Color>> DeleteTodoItem(long id)
         {
             var todoItem = await _context.ColorItems.FindAsync(id);
-            if (todoItem == null)
-            {
-                return NotFound();
-            }
+            if (todoItem == null) return NotFound();
 
             _context.ColorItems.Remove(todoItem);
             await _context.SaveChangesAsync();
 
             return todoItem;
         }
-
     }
 }
