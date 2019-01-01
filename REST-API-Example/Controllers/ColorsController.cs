@@ -18,14 +18,6 @@ namespace REST_API_Example.Controllers
         public ColorsController(ColorContext context)
         {
             _context = context;
-
-            if (_context.ColorItems.Count() == 0)
-            {
-                // Create a new TodoItem if collection is empty,
-                // which means you can't delete all TodoItems.
-                _context.ColorItems.Add(new Color {Hex = "#fffff"});
-                _context.SaveChanges();
-            }
         }
 
         [HttpGet]
