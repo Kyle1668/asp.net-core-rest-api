@@ -4,6 +4,7 @@
     <TargetFramework>netcoreapp2.1</TargetFramework>
     <AssemblyName>REST_API_Example</AssemblyName>
     <RootNamespace>REST_API_Example</RootNamespace>
+    <UserSecretsId>bc6d62ce-a90e-4a8a-9368-2dcfec268e1b</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
