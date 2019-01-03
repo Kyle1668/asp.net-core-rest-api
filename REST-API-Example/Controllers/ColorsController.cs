@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -29,11 +30,23 @@ namespace REST_API_Example.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Color>> GetColor(long id)
         {
-            var colorItem = await _context.FindAsync<Color>(id);
+            try
+            {
+                string localKey = Environment.GetEnvironmentVariable("KEY");
+                string inKey = Request.Headers["Authorization"];
 
-            if (colorItem == null) return NotFound();
+                if (inKey.Equals(localKey) == false) return BadRequest();
 
-            return colorItem;
+                var colorItem = await _context.FindAsync<Color>(id);
+                if (colorItem == null) return NotFound();
+
+                return colorItem;
+            }
+            catch (NullReferenceException e)
+            {
+                Console.WriteLine(e);
+                return BadRequest();
+            }
         }
 
         [HttpPost]
