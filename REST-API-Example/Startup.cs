@@ -6,6 +6,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using REST_API_Example.Models;
+using Newtonsoft.Json;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace REST_API_Example
 {
@@ -35,13 +38,25 @@ namespace REST_API_Example
 
             app.UseHttpsRedirection();
 
+            // Check API Key
             app.Use((context, next) =>
             {
-                string auth = context.Request.Headers["Authorization"];
+                string authHeader = context.Request.Headers["Authorization"];
+                string apiKey = System.Environment.GetEnvironmentVariable("KEY");
 
-                if (string.IsNullOrEmpty(auth) || !auth.Equals(System.Environment.GetEnvironmentVariable("KEY"))) {
+                if (string.IsNullOrEmpty(authHeader) || !authHeader.Equals(apiKey)) {
+
+                    Dictionary<string, string> responseBody = new Dictionary<string, string>() {
+                        { "error", "true" },
+                        { "message", "Invalid or missing API key." }
+                    };
+
+                    string jsonResponse = JsonConvert.SerializeObject(responseBody);
+
                     context.Response.StatusCode = 401;
-                    return context.Response.WriteAsync("hey");
+                    context.Response.ContentType = "application/json";
+                    
+                    return context.Response.WriteAsync(jsonResponse);
                 }
 
                 return next();
