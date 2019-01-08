@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -33,6 +34,20 @@ namespace REST_API_Example
                 app.UseHsts();
 
             app.UseHttpsRedirection();
+
+            app.Use((context, next) =>
+            {
+                string auth = context.Request.Headers["Authorization"];
+
+                if (string.IsNullOrEmpty(auth) || !auth.Equals(System.Environment.GetEnvironmentVariable("KEY"))) {
+                    context.Response.StatusCode = 401;
+                    return context.Response.WriteAsync("hey");
+                }
+
+                return next();
+            });
+
+
             app.UseMvc();
         }
     }
